@@ -1,0 +1,13 @@
+
+'(%Z%%M% %R%.%L%.%B%.%S% %E% %Y%)
+'(MIKKO-3 (7 / 8 - 2006) (0 : 36 : 14 50))
+(defq *package* IHME)
+
+(defun ihme ()
+ (print
+  (compress
+   (print
+    (reverse (explode (read)))
+    (print (reverse (explode (read))))))))
+
+(defq IHME (ihme IHME))

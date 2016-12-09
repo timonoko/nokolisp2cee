@@ -1,0 +1,2003 @@
+(lambda
+ ({-x {-OUTFILE {-NO-DTA-FILE)
+ (unless
+  (atom lispcee)
+  (compile-all 'lispcee)
+  (when {-OUTFILE
+   ({-save-definition 'DISKDEFI.$$$)
+   (setq BOOT nil)
+   (setq LISPCEE nil)))
+ (if {-OUTFILE
+  (progn
+   (setq {-FBODY (explode {-OUTFILE))
+   (if
+    (member 46 {-FBODY)
+    (setq {-FBODY (reverse (cdr (member 46 {-FBODY)))))
+   (setq {-INCLUDE-FILE (compress (append {-FBODY (explode '.inc))))
+   (setq {-DATA-FILE (compress (append {-FBODY (explode '.dta))))
+   (setq {-OUTFILE (compress (append {-FBODY (explode '.c))))
+   (out (setq {-OUTFILE (create {-OUTFILE))))
+  (progn (setq {-DATA-FILE 'dta.dta) (setq {-INCLUDE-FILE 'inc.inc)))
+ ({-init)
+ ({-includet)
+ (unless
+  (symbolp {-x)
+  (setq {-x (reverse {-x))
+  (while
+   (cdr {-x)
+   (eval ({-function (car {-x) (definition-of (pop {-x)))))
+  (setq {-x (car {-x)))
+ (eval ({-function {-x (definition-of {-x)))
+ (cr)
+ ({-init-const)
+ ({-main {-x)
+ (when {-OUTFILE (close {-OUTFILE) (out 0) ({-include-file {-INCLUDE-FILE))
+ {-ERRORS)
+(lambda
+ (file)
+ (if file (out (create file)))
+ (if {-GLOBALVAR ({-nodelist {-GLOBALVAR))
+ (cr)
+ (print '_node)
+ (tab 8)
+ (print '_const_)
+ (print '[)
+ (print (1+ (length {-CONST)))
+ (print '])
+ (print ';)
+ (cr)
+ (when file (close (out)) (out 0)))
+(lambda
+ ({-x)
+ (cr)
+ (prints 'main '(argc , argv))
+ (cr)
+ (prints
+  'int
+  'argc
+  ';
+  'char
+  '*argv[]
+  ';)
+ (cr)
+ (print '{)
+ (sp)
+ (prints '_initconst () ';)
+ (cr)
+ (progn
+  (print ({-validna {-x))
+  (printc 40)
+  (let
+   ((i))
+   (setq {-x (cadr (assoc {-x {-FUNCS)))
+   (setq i (length {-x))
+   (while {-x
+    (prints
+     '_arg
+     (list 'argc ', 'argv ', i))
+    (pop {-x)
+    (setq i (1- i))
+    (if {-x (print ',))))
+  (printc 41))
+ ({-print-;)
+ (cr)
+ (prints 'return '(0) '; '})
+ (cr))
+(lambda ()
+ (prints '_initconst ())
+ (cr)
+ (sp)
+ (print '{)
+ (progn
+  (prints '_initint () ';)
+  (cr)
+  (unless {-NO-DTA-FILE
+   (print '_in_file)
+   (printc 40)
+   (print '_open_file)
+   (printc 40)
+   ({-make-const {-DATA-FILE)
+   (printc 41)
+   (printc 41)
+   ({-print-;)
+   (cr)))
+ (if (and {-OUTFILE (not {-NO-DTA-FILE)) (setq {-DATA-FILE (create {-DATA-FILE)))
+ (cr)
+ (let
+  ((x (reverse {-CONST)) (n 1))
+  (while x
+   (sp)
+   (print '_const_)
+   (print '[)
+   (print n)
+   (print '])
+   (print '=)
+   ({-make-const (car x))
+   (pop x)
+   ({-print-;)
+   (cr)
+   (setq n (add1 n))))
+ (let
+  (({-x {-GLOBALVAR))
+  (while {-x
+   (sp)
+   (print ({-validna (car {-x)))
+   (print '=)
+   ({-make-const (eval (car {-x)))
+   (pop {-x)
+   ({-print-;)
+   (cr)))
+ (unless {-NO-DTA-FILE
+  (({-eka '(progn (close (in)) (in 0)))))
+ ({-print-;)
+ (print '})
+ (if (and {-OUTFILE (not {-NO-DTA-FILE)) (close {-DATA-FILE))
+ (cr))
+(lambda
+ (x)
+ (cond
+  ((null x) (print 'NIL))
+  ((eq x quote) ({-make-const 'QUOTE))
+  ((eq x t) ({-make-const 'T))
+  ((symbolp x)
+   (print '_makestring)
+   (printc 40)
+   (print '")
+   ({-valid-str x)
+   (print '")
+   (printc 41))
+  ((numberp x)
+   (print '_makenumber)
+   (printc 40)
+   (print x)
+   (printc 41))
+  ((atom x) (print 'NIL/*?*/))
+  ({-NO-DTA-FILE
+   ({-maybetab)
+   (print 'cons)
+   (printc 40)
+   ({-make-const (cdr x))
+   (print ',)
+   ({-maybetab)
+   ({-make-const (car x))
+   (printc 41))
+  (t
+   (when {-OUTFILE
+    (let
+     ((oo (out)))
+     (out {-DATA-FILE)
+     (cr)
+     (pprint x)
+     (cr)
+     (out oo)))
+   (print ({-validna 'read))
+   (print ()))))
+(lambda ()
+ (when (> (tab) 50) ({-tabi) (sp) (sp)))
+(lambda
+ (x)
+ (setq x (explode x))
+ (while x
+  (if
+   (member (car x) '(34 92))
+   (print '\))
+  (printc (pop x))))
+(lambda
+ ({-name {-x)
+ (when
+  (and {-OUTFILE (> {-LINES {-MAX-LINES-IN-C-FILE))
+  (setq {-LINES 0)
+  (cr)
+  (close {-OUTFILE)
+  (rplaca (last {-FBODY) (1+ (car (last {-FBODY))))
+  (out
+   (setq {-OUTFILE (create (compress (append {-FBODY (explode '.c))))))
+  (cr)
+  ({-includet))
+ (unless
+  (eq (car {-x) 'lambda)
+  (setq {-x
+   (if
+    (eq (car {-x) 'program)
+    (` lambda ()
+     ((function (lambda ,@ (cdr {-x)))
+      ,@
+      (map
+       (cadr {-x)
+       (function
+        (lambda
+         (x)
+         (` progn
+          (cr)
+          (print ', x)
+          (print '?:)
+          (read)))))))
+    (list 'lambda () {-x))))
+ (let
+  (({-temp))
+  (setq {-x
+   (` lambda ,
+    ({-strai-arg (cadr {-x))
+    ,@
+    (if {-temp
+     (` (let , {-temp ,@ (cddr {-x)))
+     (cddr {-x)))))
+ (let*
+  (({-loc-seed {-loc-seed)
+   ({-IN-THE-MIDDLE (cons {-name {-IN-THE-MIDDLE))
+   ({-orig-args
+    (let
+     (({-x2 (cadr {-x)) ({-y))
+     (while {-x2
+      (cond
+       ((atom {-x2)
+        (push (list '/*list*/ {-x2) {-y)
+        (setq {-x2 nil))
+       ((atom (car {-x2)) (push (pop {-x2) {-y))
+       (t
+        (pop {-x2)
+        (push (` ** BAD LAMBDA , (cadr {-x) **) {-ERRORS)
+        (push (gensym 'arg) {-y))))
+     (reverse {-y)))
+   ({-flat-args ({-flat-arglist {-orig-args))
+   ({-lo-var
+    (let
+     ((tulos nil) (except {-flat-args))
+     (mapc {-LOCALVAR
+      (function
+       (lambda
+        (x)
+        (cond
+         ((member (car x) except))
+         ((member (car x) tulos))
+         ((or {-LOCAL-FUNCS ({-any-ref-in (car x) (cddr {-x)))
+          (push (car x) tulos))))))
+     tulos))
+   ({-LOCALVAR)
+   ({-all-args))
+  (mapc {-flat-args (function (lambda ({-x) (push (list {-x) {-LOCALVAR))))
+  (mapc {-orig-args (function (lambda ({-x) (push {-x {-all-args))))
+  (mapc {-lo-var
+   (function
+    (lambda
+     ({-x)
+     (push (list '* {-x) {-all-args)
+     (push (cons {-x (list '* {-x)) {-LOCALVAR))))
+  (push (list {-name (reverse {-all-args)) {-FUNCS)
+  (` let
+   (({-tab (1+ {-tab)))
+   (cr)
+   ({-tabi)
+   (print '_node)
+   (sp)
+   (unless (zerop (out)) (echo t))
+   (print ', ({-validna {-name))
+   ({-pi-list ', (reverse (append {-flat-args {-lo-var)))
+   ({-tabi)
+   (echo nil)
+   ({-nodelist ', (map (append {-flat-args {-lo-var) {-localvar))
+   ,
+   (let
+    (({-temp))
+    ({-in-the-middle (cddr {-x))
+    (if {-temp
+     (` let
+      (({-temp ', {-temp))
+      (print '{)
+      (while {-temp
+       (cr)
+       (tab 8)
+       (print '_node)
+       (sp)
+       (print ({-validna (pop {-temp)))
+       (print ())
+       (print ';))
+      (cr)
+      ,
+      ({-return (` progn , nil ,@ (cddr {-x)))
+      ({-print-}))
+     ({-return (` progn , nil ,@ (cddr {-x))))))))
+(lambda
+ ({-x)
+ (map {-x
+  (function (lambda (x) (if (atom x) x (cadr x))))))
+(lambda
+ (x y)
+ (cond
+  ((identp y) (eq x y))
+  ((atom y) nil)
+  ((or ({-any-ref-in x (car y)) ({-any-ref-in x (cdr y))))))
+(lambda
+ ({-y {-retuexpr)
+ ({-eka {-y
+  ({-chain-retuexpr
+   (` lambda
+    (x)
+    (list
+     'progn
+     '(print 'return)
+     '(sp)
+     x)))))
+(lambda
+ ({-x {-retuexpr {-WANT-EXPRESSION)
+ (setq {-x ({-typed {-x))
+ (setq {-x
+  (case
+   (car {-x)
+   (integer ({_makenumber (cadr {-x)))
+   (boolean ({-tnil (cadr {-x)))
+   (t {-x)))
+ (setq {-x
+  (if {-retuexpr
+   (if
+    (atom (car {-retuexpr))
+    ({-retuexpr {-x)
+    (progn
+     (dolist ({-f (reverse {-retuexpr)) (setq {-x ({-f {-x)))
+     {-x))
+   {-x)))
+(lambda
+ ({-x)
+ (` progn
+  (print '_tnil)
+  (printc 40)
+  , {-x
+  (printc 41)))
+(lambda
+ (x)
+ (` progn
+  (print '_makenumber)
+  (printc 40)
+  , x
+  (printc 41)))
+(lambda
+ ({-x)
+ (cond
+  ((null {-x) '(print 'NIL))
+  ((member {-x '(nil NIL))
+   '(print 'NIL))
+  ((eq {-x t) '(print 'T))
+  ((symbolp {-x) (` print ', ({-localvar {-x)))
+  ((numberp {-x) (` integer (print , {-x)))
+  ((eq {-x quote) ({-typed ''QUOTE))
+  ((atom {-x)
+   (push (` ** Error: what is , {-x) {-ERRORS)
+   '(print 'NIL/*ERROR*/))
+  ((eq (car {-x) '{-cee) (cadr {-x))
+  ((member (car {-x) '(integer boolean))
+   (list (car {-x) ({-typed (cadr {-x))))
+  ((assoc (car {-x) {-MACRO)
+   ({-typed
+    (eval
+     (cons
+      (list quote
+       (cons 'nlambda (cdr (assoc (car {-x) {-MACRO))))
+      (cdr {-x)))))
+  (({-numope (car {-x)) (` integer , ({-arith {-x)))
+  (({-compope (car {-x)) (` boolean , ({-compare {-x)))
+  ((assoc (car {-x) {-LOCAL-FUNCS)
+   (let
+    (({-name (cdr (assoc (car {-x) {-LOCAL-FUNCS))))
+    (unless
+     (assoc {-name {-FUNCS)
+     (eval ({-function {-name (eval {-name)))
+     (set {-name nil))
+    ({-typed (cons {-name (cdr {-x)))))
+  ((assoc (car {-x) {-FUNCS)
+   (if
+    (member {-x {-F-OK)
+    (let
+     ((temp (assoc (car {-x) {-FUNCS)))
+     (setq {-F-OK (delete {-x {-F-OK))
+     (if
+      (caddr temp)
+      (let
+       (({-retuexpr))
+       (` , (caddr temp) , ({-funcall {-x (cadr temp))))
+      ({-funcall {-x (cadr temp))))
+    (let
+     ((letargs) (args) (allatoms t))
+     (if
+      (cddr {-x)
+      (mapc
+       (cdr {-x)
+       (function
+        (lambda
+         (x)
+         (if
+          (or
+           (null x)
+           (numberp x)
+           (member x '(t nil NIL))
+           (eq (car x) quote))
+          (push x args)
+          (let
+           ((a ({-loc-gensym)))
+           (unless
+            (or
+             (identp x)
+             (and
+              (member
+               (car x)
+               '(car cdr caar cadddr caddr cadr cdar cdddr cddr not null))
+              (atom (cadr x))))
+            (setq allatoms nil))
+           (push (list a x) letargs)
+           (push a args)))))))
+     ({-typed
+      (prog1
+       (if
+        (or allatoms (null (cdr letargs)))
+        {-x
+        (progn
+         (setq {-x
+          (` ,
+           (car {-x)
+           ,@
+           (reverse (cdr args))
+           ,
+           (cadr (car letargs))))
+         (` let , (reverse (cdr letargs)) , {-x)))
+       (push {-x {-F-OK))))))
+  ((not (atom (car {-x)))
+   ({-typed (cons ({-eka (car {-x)) (cdr {-x))))
+  ((member (car {-x) '(let progn if while repeat-times repeat let-functions))
+   (if {-WANT-EXPRESSION
+    ({-eka (` (function (lambda () , {-x))))
+    (case
+     (car {-x)
+     (let ({-let (cdr {-x)))
+     (progn
+      (if
+       (cddr {-x)
+       (` progn
+        (print '{)
+        (sp)
+        ,
+        ({-progn (cdr {-x))
+        ({-print-}))
+       ({-typed (cadr {-x))))
+     (if ({-if (cadr {-x) (caddr {-x) (cadddr {-x)))
+     (let-functions ({-let-functions (cdr {-x)))
+     (t
+      (if {-retuexpr
+       (case
+        (car {-x)
+        (repeat
+         ({-typed
+          (` progn (repeat (setq {-repeat (progn ,@ (cdr {-x)))) {-repeat)))
+        (t ({-typed (` progn , {-x ()))))
+       (case
+        (car {-x)
+        (while ({-while (cadr {-x) (cddr {-x)))
+        (repeat ({-repeat (cdr {-x)))
+        (repeat-times ({-repeat-times (cadr {-x) (cddr {-x)))))))))
+  ((member (car {-x) '(setq quote function))
+   (case
+    (car {-x)
+    (setq ({-setq (cadr {-x) (caddr {-x)))
+    '({-quote (cadr {-x))
+    (function
+     (let
+      ((name ({-validna ({-gensym '_F))) ({-args))
+      (push name {-PASKA-F:T)
+      (eval ({-function name (cadr {-x)))
+      ({-print-;)
+      (cr)
+      (cr)
+      name))))
+  ((member
+    (car {-x)
+    (quote
+     (color display-mode draw get-pix get-pix nxtch point printc readcc set-pix set-pix set_cursor set_cursor)))
+   (let
+    (({-y
+      (assoc
+       (car {-x)
+       (quote
+        ((display-mode _setvideomode)
+         (color _setcolor)
+         (draw _lineto)
+         (point _moveto)
+         (set-pix _setpixel)
+         (set_cursor _settextposition)
+         (printc _putch))))))
+    (if {-y
+     ({-numbs-thnx (cadr {-y) (cdr {-x))
+     (case
+      (car {-x)
+      (nxtch (` integer (print 'nxtch)))
+      (readcc
+       (quote
+        (integer (progn (print 'getch) (print '())))))
+      (get-pix (list 'integer ({-numbs-thnx '_getpixel (cdr {-x))))))))
+  ((eq (car {-x) 'eq)
+   (` boolean
+    (progn ,
+     ({-eka (cadr {-x) nil '{-WANT-EXPRESSION)
+     (print '==)
+     ,
+     ({-eka (caddr {-x) nil '{-WANT-EXPRESSION))))
+  ((and
+    (symbolp (car {-x))
+    (eq 'lambda (car (definition-of (car {-x)))))
+   (let
+    (({-LOCALVAR) ({-LOCAL-FUNCS))
+    (eval ({-function (car {-x) (definition-of (car {-x)))))
+   ({-typed {-x))
+  ((and
+    (eq (car {-x) 'case)
+    (let
+     ((y t))
+     (mapc
+      (cddr {-x)
+      (function
+       (lambda
+        (x)
+        (unless
+         (or ({-all-numbers (car x)) (eq (car x) 't))
+         (setq y nil)))))
+     y))
+   (if {-WANT-EXPRESSION
+    ({-eka (` (function (lambda () , {-x))))
+    (` progn
+     (print 'switch)
+     (printc 40)
+     ,
+     (let (({-retuexpr)) ({-want-number (cadr {-x)))
+     (printc 41)
+     (print '{)
+     ,@
+     (map
+      (cddr {-x)
+      (function
+       (lambda
+        ({-x)
+        (` progn ,@
+         (cond
+          ((numberp (car {-x)) (list ({-case-1 (car {-x))))
+          ((not (atom (car {-x))) (map (car {-x) {-case-1))
+          (t '(progn ({-tabi) (print 'default:))))
+         ,
+         (let (({-retuexpr {-retuexpr)) ({-progn (cdr {-x)))
+         (print 'break)
+         ({-print-;)))))
+     ,
+     (setq {-retuexpr)
+     (print '}))))
+  ((and
+    (symbolp (car {-x))
+    (member (car (eval (car {-x))) '(mlambda macro)))
+   ({-typed
+    (eval (cons ({-macrofy (eval (car {-x))) (cdr {-x)))))
+  (t
+   (push (` ** Error: cant compile , {-x) {-ERRORS)
+   '(print 'NIL/*ERROR*/))))
+(lambda
+ (lambh)
+ (list
+  'quote
+  (cons
+   (if
+    (eq (car lambh) 'macro)
+    'nslambda
+    'nlambda)
+   (cdr lambh))))
+(lambda
+ ({-x)
+ (` progn
+  ({-tabi)
+  (print 'case)
+  (sp)
+  ,
+  ({-want-number {-x)
+  (print ':)))
+(lambda
+ (x)
+ (if
+  (atom x)
+  (or (null x) (numberp x))
+  (and ({-all-numbers (car x)) ({-all-numbers (cdr x)))))
+(lambda
+ (x)
+ (let
+  ((y (assoc x *COMPILED-FUNCTIONS*)))
+  (if y
+   (if
+    (eq (cadr y) '*IN-FILE*)
+    (let
+     ((file (open (caddr y))) (inp (in)))
+     (LSEEK file 0 (cadddr y))
+     (in file)
+     (prog1 (read) (close file) (in inp)))
+    (cadr y))
+   (eval x))))
+(lambda
+ (file method pos)
+ (BX-reg file)
+ (CX-reg (if pos (car pos) 0))
+ (DX-reg (if pos (cdr pos) 0))
+ (AX-reg (plus 16896 method))
+ (if (INT- 33) (cons (DX-reg) (AX-reg))))
+(lambda
+ (n args l)
+ (` progn
+  (print ', n)
+  (printc 40)
+  ,
+  ({-want-number (pop args))
+  ,@
+  (map args
+   (function
+    (lambda
+     (x)
+     (list 'progn '(print ',) ({-want-number x)))))
+  (printc 41)))
+(lambda
+ (x)
+ (let
+  ((defined (member x {-CONST)))
+  (if defined
+   (` progn
+    (print '_const_)
+    (print '[)
+    (print , (length defined))
+    (print '])
+    ,
+    (if
+     (and (atom x) (not (member x '(/* */))))
+     (` prints '/* ', x '*/)))
+   (progn (push x {-CONST) ({-quote x)))))
+(lambda
+ ({-x {-y)
+ ({-eka {-y
+  ({-chain-retuexpr
+   (` lambda
+    (x)
+    (list
+     'progn
+     '(printc 40)
+     '(print ', ({-localvar {-x))
+     '(print '=)
+     '(sp)
+     x
+     '(printc 41))))
+  {-WANT-EXPRESSION))
+(lambda
+ ({-x {-y)
+ (` let
+  (({-tab (1+ {-tab)))
+  (print '{)
+  (print 'int)
+  (sp)
+  (print '_i)
+  ({-print-;)
+  ({-tabi)
+  (print 'for)
+  (sp)
+  (printc 40)
+  (print '_i=0)
+  ({-print-;)
+  (print '_i<)
+  ,
+  ({-want-number {-x)
+  ({-print-;)
+  (print '_i++)
+  (printc 41)
+  ({-tabi)
+  ,
+  ({-eka (cons 'progn {-y) {-retuexpr)
+  ,
+  (unless (cdr {-y) '({-print-;))
+  ({-print-})))
+(lambda
+ ({-y {-x)
+ (while (cdr {-y) (push (pop {-y) {-x))
+ (setq {-x (reverse {-x))
+ (setq {-y (car {-y))
+ (setq {-retuexpr nil)
+ (` let
+  (({-tab (1+ {-tab)))
+  (print 'do)
+  ({-tabi)
+  (setq {-last-} nil)
+  ,
+  ({-eka (cons 'progn {-x))
+  (if {-last-} (setq {-last-} nil) ({-print-;))
+  ({-tabi)
+  (print 'while)
+  (printc 40)
+  ,
+  ({-want-boolean (list 'not {-y))
+  (printc 41)
+  (setq {-last-} nil)))
+(lambda
+ ({-x {-y)
+ (setq {-retuexpr nil)
+ (` let
+  (({-tab (1+ {-tab)))
+  (print 'while)
+  (printc 40)
+  ,
+  ({-want-boolean {-x)
+  (printc 41)
+  ({-tabi)
+  ,
+  ({-eka (cons 'progn {-y))))
+(lambda
+ ({-x)
+ (let*
+  (({-FLET-FUNCS)
+   ({-LOCAL-FUNCS
+    (nconc
+     (mapcar
+      (function
+       (lambda
+        ({-y)
+        (let
+         (({-nimi ({-validna ({-gensym (car {-y)))))
+         (push {-nimi {-FLET-FUNCS)
+         (set {-nimi (cadr {-y))
+         (cons (car {-y) {-nimi))))
+      (car {-x))
+     {-LOCAL-FUNCS)))
+  (prog1
+   ({-typed (cons 'progn (cdr {-x)))
+   (mapc {-FLET-FUNCS (function (lambda ({-x) (set {-x nil)))))))
+(lambda
+ (x)
+ (unless x (setq x '_X_))
+ (compress
+  (nconc
+   (explode '_)
+   (nconc (explode x) (explode (setq {-gensym-seed (add1 {-gensym-seed)))))))
+(lambda
+ ({-x {-y {-z)
+ (if
+  (member (car {-x) '(not null))
+  ({-if (cadr {-x) {-z {-y)
+  (prog1
+   (` let
+    (({-tab (1+ {-tab)))
+    (print 'if)
+    (printc 40)
+    ,
+    (let (({-retuexpr)) ({-want-boolean {-x))
+    (printc 41)
+    ({-tabi)
+    (setq {-last-} nil)
+    ,
+    ({-eka {-y {-retuexpr)
+    ,@
+    (if
+     (or {-z {-retuexpr)
+     (`
+      (setq {-tab (1- {-tab))
+      (if {-last-} (setq {-last-} nil) ({-print-;))
+      ({-tabi)
+      (print 'else)
+      (sp)
+      ,
+      ({-eka {-z {-retuexpr))))
+   (setq {-retuexpr nil))))
+(lambda
+ ({-x)
+ (let
+  (({-WANT-EXPRESSION t))
+  (setq {-x ({-typed {-x))
+  (case
+   (car {-x)
+   (boolean (cadr {-x))
+   (integer '(print 1))
+   (t (` progn (print 'NIL!=) , {-x)))))
+(lambda
+ ({-x)
+ (let*
+  ((valut
+    (mapcar
+     (function
+      (lambda (x) ({-eka (` setq __saatana , (cadr x)))))
+     (car {-x)))
+   ({-LOCALVAR {-LOCALVAR)
+   (varit
+    (mapcar
+     (function
+      (lambda
+       ((x . rest))
+       (let
+        ((y (compress (nconc (explode x) (explode 'L_)))))
+        (push (cons x y) {-LOCALVAR)
+        ({-validna y))))
+     (car {-x))))
+  (` let
+   (({-tab (1+ {-tab)))
+   (print '{)
+   (sp)
+   ,
+   (if varit
+    (` progn
+     ({-nodelist ', varit)
+     ,@
+     (mapcar
+      (function
+       (lambda
+        (var val)
+        (` progn , (subst '__saatana var val) ({-print-;) ({-tabi))))
+      varit valut)))
+   ,
+   ({-progn (cdr {-x))
+   ({-print-}))))
+(lambda
+ ({-x)
+ (` let
+  (({-tab (1+ ({-tab))))
+  ,@
+  (let
+   ((tulos nil))
+   (while {-x
+    (if
+     (or
+      (and (atom (car {-x)) (or (not {-retuexpr) (cdr {-x)))
+      (member (caar {-x) '(comment %include)))
+     (pop {-x)
+     (if
+      (eq (caar {-x) 'defun)
+      (setq {-x
+       (` (flet (, (cdr (car {-x))) ,@ (cdr {-x))))
+      (push
+       (` progn
+        (setq {-last-} nil)
+        ,
+        ({-eka
+         (pop {-x)
+         (if (not {-x) (prog1 {-retuexpr (setq {-retuexpr nil))))
+        (unless {-last-} ({-print-;))
+        ({-tabi))
+       tulos))))
+   (reverse tulos))))
+(lambda ()
+ (compress
+  (nconc
+   (explode '__)
+   (explode (setq {-loc-seed (add1 (or {-loc-seed 0)))))))
+(lambda
+ ({-x {-args)
+ (if
+  (and (atom (car {-args)) (null (cdr {-args)) (cadr {-x))
+  ({-eka
+   (cadr {-x)
+   ({-chain-retuexpr
+    (` lambda
+     (x)
+     (list
+      'progn
+      '({-Clear-PF ', ({-validna (car {-x)))
+      '(printc 40)
+      x
+      '(printc 41))))
+   {-WANT-EXPRESSION)
+  (` progn
+   ({-Clear-PF ', (pop {-x))
+   (printc 40)
+   ,@
+   (let
+    (({-tab (if {-tab (1+ {-tab) 1)) (tulos))
+    (while {-args
+     (push
+      (cond
+       ((eq (caar {-args) '*)
+        (if
+         (= (getchar ({-localvar (cadr (car {-args))) 1) (char *))
+         (` print ', ({-validna (cadr (car {-args))))
+         (` progn
+          (print '&)
+          (print ', ({-localvar (cadr (car {-args)))))))
+       ((eq (caar {-args) '/*list*/)
+        (prog1
+         ({-eka (cons 'list {-x) nil '{-WANT-EXPRESSION)
+         (setq {-x nil)))
+       ({-x ({-eka (pop {-x) nil '{-WANT-EXPRESSION))
+       (t '(print 'NIL)))
+      tulos)
+     (pop {-args)
+     (if {-args (push '(progn (printc 44) ({-maybetab)) tulos)))
+    tulos)
+   (printc 41))))
+(lambda
+ (x)
+ (let
+  ((y (assoc x {-LOCALVAR)))
+  ({-validna
+   (cond
+    ((cdr y) (cdr y))
+    ((car y) x)
+    ((member x {-GLOBINIT) x)
+    ((member x {-GLOBALVAR) x)
+    (t (push x {-GLOBALVAR) x)))))
+(lambda
+ ({-x)
+ (if {-retuexpr
+  (prog1 (append {-retuexpr (list {-x)) (setq {-retuexpr nil))
+  (list {-x)))
+(lambda
+ (x y)
+ (cond
+  ((atom y) y)
+  ((null y) y)
+  ((equal (car y) x) (delete x (cdr y)))
+  (t
+   (cons (delete x (car y)) (delete x (cdr y))))))
+(lambda
+ ((x y z) {-retuexpr)
+ (` progn ,
+  ({-want-number y)
+  (print ', ({-compope x))
+  ,
+  ({-want-number z)))
+(lambda
+ (x)
+ (case x
+  (lessp '<)
+  (greaterp '>)
+  (eqn '==)
+  (t nil)))
+(lambda
+ ((x y z) {-retuexpr)
+ (` progn
+  (printc 40)
+  ,
+  ({-want-number y)
+  (print ', ({-numope x))
+  ({-maybetab)
+  ,
+  ({-want-number z)
+  (printc 41)))
+(lambda
+ ({-x)
+ (let
+  (({-WANT-EXPRESSION t))
+  (setq {-x ({-typed {-x))
+  (cond
+   ((numberp {-x) (` print , {-x))
+   ((eq (car {-x) 'integer) (cadr {-x))
+   (t
+    (` progn
+     (print '_numval)
+     (printc 40)
+     , {-x
+     (printc 41))))))
+(lambda
+ (x)
+ (case x
+  (logand '&)
+  (logor '|)
+  (logxor '^)
+  (remainder '%)
+  (plus '+)
+  (difference '-)
+  (times '*)
+  (quotient '/)
+  (t nil)))
+(lambda
+ (x)
+ (if
+  (atom x)
+  (if
+   (member x (cdr {-IN-THE-MIDDLE))
+   (push-once x {-temp)
+   (let
+    ((temp (assoc x {-LOCAL-FUNCS)))
+    (if temp ({-in-the-middle (cdr temp)))))
+  (progn ({-in-the-middle (car x)) ({-in-the-middle (cdr x)))))
+(lambda
+ (x)
+ (if
+  (atom x)
+  x
+  (if
+   (atom (car x))
+   (cons (car x) ({-strai-arg (cdr x)))
+   (cons
+    (let ((name (gensym))) ({-strai-arg2 (car x) name) name)
+    ({-strai-arg (cdr x))))))
+(lambda
+ (x nimi)
+ (if
+  (atom x)
+  (if (symbolp x) (push (list x nimi) {-temp))
+  (progn
+   ({-strai-arg2 (car x) (list 'car nimi))
+   ({-strai-arg2 (cdr x) (list 'cdr nimi)))))
+(lambda ()
+ (#include 'lispinit.h)
+ (#include {-INCLUDE-FILE)
+ (progn (cr) (prints '#ifndef 'vax))
+ (#include 'lispinit.dec)
+ ({-func-dec)
+ (progn (cr) (print '#endif)))
+(lambda ()
+ (mapc {-FUNCS
+  (function
+   (lambda ({-x) (unless (assoc (car {-x) {-INITFUNCS) ({-ext-func {-x))))))
+(lambda
+ (x)
+ (print 'extern)
+ (sp)
+ (print
+  (case
+   (caddr x)
+   (integer 'int)
+   (boolean 'char)
+   (t '_node)))
+ (sp)
+ (print ({-validna (car x)))
+ (printc 40)
+ ({-nodelist (reverse (cadr x)) t)
+ (printc 41)
+ (print ';)
+ (cr))
+(lambda
+ (x no-;)
+ (when x
+  (let
+   (({-tab (+ 5 {-tab)))
+   (while x
+    ({-tabi)
+    (print '_node)
+    (sp)
+    (print ({-validna (pop x)))
+    (if no-; (if x (print ',)) ({-print-;))))
+  ({-tabi)))
+(lambda () (setq {-last-} nil) (print ';))
+(lambda ()
+ (if {-LINES (setq {-LINES (1+ {-LINES)))
+ (cr)
+ (tab {-tab))
+(lambda
+ (name)
+ (cond
+  ((cdr (assoc name {-VALIDNA)))
+  (({-cdr-assoc name {-VALIDNA) name)
+  ((not (atom name))
+   (let
+    ((name2 (string-append (car name) ({-validna (cadr name)))))
+    (push (cons name name2) {-VALIDNA)
+    (push (cons name2 name2) {-VALIDNA)
+    ({-validna name)))
+  ((member name
+    (quote
+     (asm auto break case char const continue default do
+      double else enum extern float for goto if int long
+      register return short sizeof static struct switch typedef
+      union unsigned void while far fortran huge near pascal)))
+   (push
+    (cons name (compress (cons (char _) (explode name))))
+    {-VALIDNA)
+   ({-validna name))
+  (t
+   (let
+    ((val
+      (function
+       (lambda
+        (x)
+        (let
+         ((ch (car x)))
+         (cond
+          ((null x) ())
+          ((or
+            (= ch 95)
+            (< 47 ch 58)
+            (< 96 ch 123)
+            (< 64 ch 91))
+           (cons ch (val (cdr x))))
+          (t
+           (cons 95
+            (cons (plus 65 (remainder ch 24)) (val (cdr x))))))))))
+     (name2))
+    (setq name2 (val (explode name)))
+    (if
+     (greaterp (length name2) 20)
+     (setq name2
+      (nconc
+       (reverse (cdxr (difference (length name2) 16) (reverse name2)))
+       (explode (length name2)))))
+    (setq name2 (compress name2))
+    (push (cons name name2) {-VALIDNA)
+    name2))))
+(lambda x
+ (compress
+  (mapcan
+   (function (lambda (x) (if x (explode x) (list 32))))
+   x)))
+(lambda
+ (x y)
+ (while
+  (and y (not (equal x (cdar y))))
+  (pop y))
+ y)
+(lambda (x) (cdr (car x)))
+(lambda
+ (x)
+ (cr)
+ (print '#include)
+ (sp)
+ (print '")
+ (print x)
+ (print '")
+ (cr))
+(lambda ()
+ (setq {-LINES 0)
+ (setq {-ERRORS nil)
+ (setq {-GLOBINIT '(_echo nxtch _waste_bas))
+ (setq {-GLOBALVAR nil)
+ (setq {-CONST nil)
+ (setq {-gensym-seed 1)
+ (setq {-tab 1)
+ (setq {-VALIDNA
+  (quote
+   ((getchar . _getchar)
+    (plm-item . plmitem)
+    (read . _lisp_read)
+    (length . _list_length)
+    (open . _open_file)
+    (create . _create_file)
+    (close . _close_file)
+    (in . _in_file)
+    (dispose . _dispose))))
+ (setq {-INITFUNCS
+  (quote
+   ((nth (x y))
+    (nthcdr (x y))
+    (dispose (x))
+    (out (x))
+    (in (x))
+    (plm-item ())
+    (tab (x))
+    (compress (x))
+    (explode (x))
+    (getchar (x y))
+    (close (x))
+    (create (x))
+    (open (x))
+    (subst (x y z))
+    (delete (x y))
+    (length (x) integer)
+    (nconc (x y))
+    (last (x))
+    (append (x y))
+    (reverse (x y))
+    (print (x))
+    (assoc (x y))
+    (member (x y))
+    (equal (x y))
+    (cons (x y))
+    (car (x))
+    (cdr (x))
+    (atom (x) boolean)
+    (numberp (x) boolean)
+    (identp (x) boolean)
+    (rplaca (x y))
+    (rplacd (x y))
+    (read ())
+    (readc () integer))))
+ (setq {-FUNCS {-INITFUNCS))
+(lambda
+ (filename)
+ (eval
+  (quote
+   (let
+    ((fil (create filename)))
+    (out fil)
+    (mapc *COMPILED-FUNCTIONS*
+     (function
+      (lambda
+       (f)
+       (let
+        ((p (LSEEK fil 2)))
+        (pprint (cadr f))
+        (cr)
+        (rplacd f (list '*IN-FILE* filename p))))))
+    (close fil)
+    (out 0)
+    (setq {-autost2 autost)
+    (setq autost {-autost)))))
+(lambda ()
+ (msdos 98)
+ (let
+  ((psp (BX-reg)) (line (list 40)))
+  (for
+   (p 0 (sub1 (peek psp 128)))
+   (push (peek psp (plus 130 p)) line))
+  (read-from-list (reverse line))))
+(lambda
+ (x attr)
+ (unless x (setq x '*.*))
+ (unless attr (setq attr 0))
+ (let
+  ((tulos (list (find-first x attr))) (one))
+  (if tulos (while (setq one (find-next attr)) (push one tulos)))
+  tulos))
+(lambda
+ (v dept goto p ch *MORE*)
+ (setq v (append v))
+ (setq p (if goto (pop goto) 0))
+ (if goto
+  (progn (cr) (print goto))
+  (progn
+   (eprint v)
+   (set_cursor 1 40)
+   (prints *package* name dept p)
+   (cr)))
+ (repeat
+  (when
+   (greaterp p 22)
+   (while
+    (greaterp p 22)
+    (setq p (sub1 p))
+    (push (pop v) *MORE*))
+   (unless goto (eprint v)))
+  (setq THIS (nth p v))
+  (if goto
+   (setq ch 6)
+   (progn
+    (set_cursor (plus 1 p) 1)
+    (cr)
+    (repeat
+     (greaterp
+      (setq ch
+       (readcc-Ž-™
+        (quote
+         ((62 . 114)
+          (61 . 99)
+          (60 . 119)
+          (59 . 97)
+          (83 . 121)
+          (82 . 110)
+          (73 . 57)
+          (72 . 56)
+          (71 . 55)
+          (77 . 54)
+          (75 . 52)
+          (81 . 51)
+          (80 . 50)
+          (79 . 49)))))
+      32))
+    (setq ch (compress (list ch)))))
+  (cond
+   ((member ch '(1 2 3))
+    (let
+     ((cou 21))
+     (repeat
+      (if
+       (lessp p (length v))
+       (if
+        (greaterp p 21)
+        (progn
+         (set_cursor 1 1)
+         (print '*MORE*)
+         (push (pop v) *MORE*)
+         (delete-line 2)
+         (insert-line 24)
+         (set_cursor 24 4)
+         (eprint2 (nth 22 v)))
+        (setq p (add1 p))))
+      (or
+       (eqn ch 2)
+       (unless (nthcdr p v) (eprint v) t)
+       (and (eqn ch 3) (zerop (setq cou (sub1 cou))))))))
+   ((member ch '(7 8 9))
+    (let
+     ((cou 22))
+     (repeat
+      (if
+       (lessp p 1)
+       (when *MORE*
+        (push (pop *MORE*) v)
+        (delete-line 24)
+        (insert-line 2)
+        (set_cursor 2 4)
+        (eprint2 (car v)))
+       (setq p (sub1 p)))
+      (or
+       (eqn ch 8)
+       (unless *MORE* (eprint v) t)
+       (and (eqn ch 9) (zerop (setq cou (sub1 cou))))))))
+   ((equal ch 6)
+    (if
+     (atom THIS)
+     (unless goto
+      (repeat-times 5 (sp))
+      (rplaca (nthcdr p v) (edit-line THIS))
+      (eprint v))
+     (progn
+      (rplaca (cdxr p v) (edit3 THIS (add1 dept) goto))
+      (if edit-bye (push (plus (length *MORE*) p) *LAST-EDIT*) (eprint v))))
+    (setq goto nil))
+   ((eq ch 'l)
+    (set_cursor 25 1)
+    (print 'locate:)
+    (if
+     (setq goto (locate (read-with-edit) v))
+     (setq p (pop goto))
+     (eprint v)))
+   ((eq ch '-)
+    (print 'BYE)
+    (setq edit-bye t)
+    (setq *LAST-EDIT* (list (plus (length *MORE*) p))))
+   ((eq ch 'v)
+    (setq ch (nth p v))
+    (rplaca (cdxr p v) (car (cdxr (add1 p) v)))
+    (rplaca (cdxr (add1 p) v) ch)
+    (setq p (add1 p))
+    (eprint v))
+   ((eq ch 'b)
+    (setq v (einsert (copy (car (cdxr p v))) p v)))
+   ((eq ch 's)
+    (set_cursor 24 1)
+    (print 'SUBST:)
+    (eprint
+     (setq v
+      (subst (read-with-edit) (progn (print 'WITH:) (read-with-edit)) v))))
+   ((eq ch 'y)
+    (delete-line (plus p 2))
+    (push (nth p v) *JEMMA*)
+    (setq v (nthdel p v))
+    (if (greaterp (length v) 20) (eprint v)))
+   ((eq ch 'p)
+    (home)
+    (erase_page)
+    (cr)
+    (hex *HEX*)
+    (pprint (append (reverse *MORE*) v))
+    (hex nil)
+    (cr)
+    (reclaim)
+    (readcc)
+    (eprint v))
+   ((eq ch '+)
+    (setq v (nthpush p (car *JEMMA*) v))
+    (nconc *JEMMA* (list (car *JEMMA*)))
+    (pop *JEMMA*)
+    (eprint v))
+   ((eq ch 'n)
+    (insert-line (plus p 2))
+    (set_cursor (plus p 2) 5)
+    (setq v (nthpush p (read-with-edit) v))
+    (setq p (add1 p)))
+   ((and (eq ch 'r) (not (atom THIS)))
+    (push nil v)
+    (rplacd
+     (cdxr p v)
+     (nconc
+      (car (cdxr (add1 p) v))
+      (cdxr (plus p 2) v)))
+    (pop v)
+    (eprint v))
+   ((eq ch 'a)
+    (rplaca (cdxr p v) (list (car (cdxr p v))))
+    (eprint v))
+   ((and (eq ch 'c) (not (atom THIS)))
+    (nconc THIS (list (car (cdxr (add1 p) v))))
+    (rplacd (cdxr p v) (cdxr (plus 2 p) v))
+    (eprint v))
+   ((eq ch 'w)
+    (push nil v)
+    (rplacd
+     (cdxr p v)
+     (cons
+      (list
+       (car (cdxr (add1 p) v))
+       (car (cdxr (plus p 2) v)))
+      (cdxr (plus 3 p) v)))
+    (pop v)
+    (eprint v))
+   ((eq ch 'q)
+    (rplaca
+     (cdxr p v)
+     (list 'quote (car (cdxr p v))))
+    (eprint v))
+   ((equal ch 4))
+   ((eq ch 'e)
+    (set_cursor 25 1)
+    (print 'EVAL:)
+    (let
+     ((kama (err-set (eval (read-with-edit)))))
+     (if kama (setq v (einsert (car kama) p v)) (readcc)))
+    (eprint v))
+   ((and (eq ch 'z) (identp THIS))
+    (let
+     ((*package* *package*) (*LAST-EDIT* nil) (edit-bye edit-bye))
+     (eval (list 'edit THIS)))
+    (eprint v)
+    ())
+   ((eq ch 'k)
+    (cr)
+    (set_cursor 25 10)
+    (print '(RAKENTEEN TAYDELLINEN KOPIO - ODOTA !!))
+    (cr)
+    (setq v (copy v))
+    (eprint v))
+   ((eq ch 'f) (eprint v))
+   ((eq ch 'h)
+    (setq *HEX* (not *HEX*))
+    (eprint v))
+   ((eq ch '?)
+    (home)
+    (erase_page)
+    (cr)
+    (pprint
+     (quote
+      ((numerot = ylos alas sisaan ulos etc)
+       (l S = etsi S)
+       (n S = tunge tahan S)
+       (e S = tunge tahan (eval S))
+       (y = poista tama)
+       (p = nayta kunnolla)
+       (r = poista sulut)
+       (a = lisaa sulut)
+       (w = yhdista kaksi)
+       (s = korvaa tama talla)
+       (b = tama tublana)
+       (v = vaihda 2 keskenaan)
+       (z = editoi tunnuksen arvoa)
+       (c = jatka tata listaa sita seuraavalla)
+       (f = virkista naytto)
+       (k = fl kopio tasta)
+       (q = tahan kojootti)
+       (- = ulos kaikesta)
+       (h = hexa-tulostus JUU/EI))))
+    (cr)
+    (readcc)
+    (eprint v))
+   (t
+    (cr)
+    (set_cursor 22 10)
+    (printc 7)
+    (print '(mantti! jos haluat apua paina " ? "))
+    (cr)))
+  (or edit-bye (equal ch 4)))
+ (if *MORE* (nconc (reverse *MORE*) v) v))
+(lambda
+ (old new tree)
+ (cond
+  ((null tree) tree)
+  ((equal old tree) new)
+  ((atom tree) tree)
+  (t
+   (cons
+    (subst old new (car tree))
+    (subst old new (cdr tree))))))
+(lambda
+ (x)
+ (if
+  (atom x)
+  x
+  (cons (copy (car x)) (copy (cdr x)))))
+(lambda
+ (x p y)
+ (push nil y)
+ (rplacd (cdxr p y) (cons x (cdxr (add1 p) y)))
+ (insert-line (plus p 2))
+ (set_cursor (plus p 2) 4)
+ (eprint2 x)
+ (cdr y))
+(lambda
+ (x y)
+ (if
+  (atom y)
+  nil
+  (if
+   (member x y)
+   (list (sub1 (length (member x (reverse y)))))
+   (let
+    ((z 0) (z2))
+    (while
+     (and y (not z2))
+     (if
+      (not (setq z2 (locate x (pop y))))
+      (setq z (add1 z))))
+    (if z2 (cons z z2))))))
+(lambda
+ (x)
+ (AX-reg (plus 1792 1))
+ (CX-reg (times 256 (sub1 x)))
+ (DX-reg 6223)
+ (BX-reg 1792)
+ (INT- 16))
+(lambda
+ (x)
+ (AX-reg (plus 1536 1))
+ (CX-reg (times 256 (sub1 x)))
+ (DX-reg 6223)
+ (BX-reg 1792)
+ (INT- 16))
+(lambda x (while x (print (pop x)) (sp)))
+(lambda
+ (x)
+ (home)
+ (erase_page)
+ (if *MORE* (print '*MORE*) (printc 40))
+ (cr)
+ (for
+  (p 0 22)
+  (when
+   (nthcdr p x)
+   (tab 3)
+   (eprint2 (nth p x))
+   (cr)))
+ (if (nthcdr 23 x) (print '*MORE*) (printc 41)))
+(lambda
+ (x)
+ (hex *HEX*)
+ (sp)
+ (sp)
+ (if
+  (atom x)
+  (print x)
+  (let
+   ((dec 10))
+   (printc 40)
+   (while
+    (and x (lessp (tab) 60))
+    (cond
+     ((atom x)
+      (printc 46)
+      (sp)
+      (print x)
+      (setq x nil))
+     ((lessp dec 0) (print '&))
+     ((atom (car x))
+      (print (car x))
+      (if (cdr x) (sp)))
+     ((depthl dec (car x)) (print (car x)))
+     (t (print '&) (sp)))
+    (setq dec (plus dec -3))
+    (pop x))
+   (printc 41)))
+ (hex nil))
+(progn (repeat-times 49 (cr)) (home))
+(lambda
+ (name callers)
+ (let
+  ((body (eval name)))
+  (when
+   (member (car body) '(lambda progn))
+   (setq body (macroexpand body))
+   (flet
+    ((no-eval
+      (body)
+      (cond
+       ((eq (car body) 'quote) nil)
+       ((identp body)
+        (cond
+         ((eq body name) nil)
+         ((member body callers) nil)
+         ((member (car (eval body)) '(lambda progn))
+          (compile-all body (cons name callers)))))
+       ((atom body) nil)
+       (t (append (no-eval (car body)) (no-eval (cdr body)))))))
+    (append (no-eval body) (compile name))))))
+(repeat
+ (unless (atom *main-loop*) (error-reset '(recompile)))
+ (hex nil)
+ (if
+  (zerop (in))
+  (progn
+   (cr)
+   (prin1 *LINE-NUMB*)
+   (prin1 '>)
+   (setq @n (read-with-edit))
+   (setq @n
+    (case @n
+     (+ '@)
+     (* '@e)
+     (e '(edit))
+     (quit '(quit))
+     (t
+      (cond
+       ((assoc @n @t) (edit-line (cdr (assoc @n @t))))
+       ((eq *UP/DO* 'UP)
+        (let
+         ((ln (sub1 *LINE-NUMB*)))
+         (sp)
+         (repeat
+          (setq @n (edit-line (cdr (assoc ln @t))))
+          (if *UP/DO*
+           (progn
+            (repeat-times 40 (sp))
+            (repeat-times 40 (printc 8))
+            (setq ln
+             (if (eq *UP/DO* 'UP) (sub1 ln) (add1 ln)))
+            nil)
+           t))
+         @n))
+       (t @n)))))
+   (unless
+    (member @n '(@ @n @t @e ()))
+    (setq @ @n)
+    (when @n
+     (push (cons *LINE-NUMB* @n) @t)
+     (setq *LINE-NUMB* (if *LINE-NUMB* (add1 *LINE-NUMB*) 0))
+     (rplacd (nthcdr 20 @t) nil)))
+   (setq @e (error-hook (eval @n)))
+   (cr)
+   (hex *HEX*)
+   (pprint @e))
+  (progn
+   (cr)
+   (print 'file)
+   (print '>)
+   (setq @n (read))
+   (if
+    (eq @n 'END-OF-FILE)
+    (progn (close (in)) (in 0))
+    (pprint (eval @n)))))
+ nil)
+(edit-line '####)
+(lambda
+ (line pos ch pc long-line)
+ (flet
+  ((p1
+    (x)
+    (while x (printc (pop x)))
+    (printc 32)
+    (printc 8))
+   (cuf () (printc (nth pos line)))
+   (pr-rest
+    (x)
+    (p1 x)
+    (sp)
+    (repeat-times (add1 (length x)) (printc 8)))
+   (push-ch
+    (ch)
+    (printc ch)
+    (setq line (nthpush pos ch line))
+    (setq pos (add1 pos))
+    (pr-rest (nthcdr pos line)))
+   (refresh ()
+    (repeat-times pos (printc 8))
+    (p1 line)
+    (repeat-times (- (length line) pos) (printc 8)))
+   (l-line
+    (z)
+    (while
+     (greaterp (length line) 70)
+     (push (pop line) long-line)
+     (setq pos (sub1 pos))
+     (printc 8)
+     (setq z t))
+    (while
+     (and long-line (lessp (length line) 70))
+     (push (pop long-line) line)
+     (cuf)
+     (setq pos (add1 pos))
+     (setq z t))
+    (if z (refresh))))
+  (setq *UP/DO* nil)
+  (setq line
+   (if
+    (eq line '####)
+    (setq line (list 32))
+    (print-to-list line)))
+  (while (nthcdr 70 line) (push (pop line) long-line))
+  (setq pos (length line))
+  (p1 line)
+  (repeat
+   (l-line)
+   (setq pc ch)
+   (setq ch
+    (readcc-Ž-™
+     (quote
+      ((82 . 32)
+       (83 . 4)
+       (80 . 14)
+       (77 . 6)
+       (72 . 16)
+       (71 . 1)
+       (79 . 5)
+       (75 . 2)))))
+   (cond
+    ((and
+      (greaterp pos 0)
+      (or (eqn ch 8) (eqn ch 127)))
+     (setq line (nthdel (sub1 pos) line))
+     (setq pos (sub1 pos))
+     (printc 8)
+     (pr-rest (nthcdr pos line))
+     nil)
+    ((greaterp ch 31) (push-ch ch) nil)
+    ((null line) nil)
+    ((eqn ch 1)
+     (repeat-times pos (printc 8))
+     (setq pos 0)
+     nil)
+    ((eqn ch 18) (refresh) nil)
+    ((eqn ch 2)
+     (when (greaterp pos 0) (printc 8) (setq pos (sub1 pos)))
+     nil)
+    ((eqn ch 6)
+     (when
+      (lessp pos (length line))
+      (cuf)
+      (setq pos (add1 pos)))
+     nil)
+    ((eqn ch 16) (setq *UP/DO* 'UP))
+    ((eqn ch 14) (setq *UP/DO* 'DOWN))
+    ((eqn ch 4)
+     (setq line (nthdel pos line))
+     (pr-rest (nthcdr pos line))
+     nil)
+    ((eqn ch 5)
+     (repeat-times (difference (length line) pos) (cuf))
+     (setq pos (length line))
+     nil)
+    ((eqn ch 13) t)
+    ((eqn ch 9)
+     (when
+      (eqn pos (length line))
+      (setq apr nil)
+      (setq line (reverse line))
+      (repeat-until
+       (or
+        (null line)
+        (member (car line) '(40 41 39 32)))
+       (printc 8)
+       (printc 32)
+       (printc 8)
+       (push (pop line) apr))
+      (setq line (reverse line))
+      (when apr
+       (unless
+        (equal pc 9)
+        (setq apr (str-compress apr))
+        (setq *PAPRL* (apropos apr)))
+       (if *PAPRL*
+        (setq apr (explode (pop *PAPRL*)))
+        (setq apr (list 63)))
+       (p1 apr)
+       (setq line (append line apr)))
+      (setq pos (length line)))
+     nil)
+    ((eqn ch 3) (error-reset ^C))
+    (t
+     (mapc
+      (nconc (explode '^) (list (plus ch 64)))
+      push-ch)
+     nil)))
+  (if *UP/DO* (repeat-times pos (printc 8)) (cr))
+  (read-from-list (append (reverse long-line) line))))
+(lambda
+ (x)
+ (let
+  ((line (list nil)))
+  (flet
+   ((printc (x) (nconc line (list x)))
+    (print-in-lisp
+     (x)
+     (cond
+      ((null x) (printc 40) (printc 41))
+      ((eq x t) (printc 116))
+      ((eq x quote)
+       (mapc '(113 117 111 116 101) printc))
+      ((atom x) (mapc (explode x) printc))
+      ((eq (car x) quote) (printc 39) (print-in-lisp (cadr x)))
+      (t
+       (printc 40)
+       (let
+        ((x x))
+        (while x
+         (print-in-lisp (pop x))
+         (if x
+          (if
+           (atom x)
+           (progn
+            (printc 32)
+            (printc 46)
+            (printc 32)
+            (print-in-lisp x)
+            (setq x ()))
+           (printc 32)))))
+       (printc 41)))
+     x))
+   (print-in-lisp x))
+  (cdr line)))
+(lambda
+ (line fratom)
+ (flet
+  ((readc () (or (pop line) 41))
+   (nxtch () (or (car line) 41))
+   (read-in-lisp ()
+    (let
+     ((ch 32))
+     (setq fratom t)
+     (flet
+      ((readident
+        (ch)
+        (let
+         ((str (list ch)))
+         (while
+          (and
+           (not (member (nxtch) '(40 41)))
+           (greaterp (nxtch) 32))
+          (nconc str (list (readc))))
+         (compress str)))
+       (readlist ()
+        (let
+         ((i (read-in-lisp)) (c2 nil))
+         (if
+          (and fratom (eq i nil))
+          (setq fratom nil)
+          (let
+           ((temp i) (c1 nil))
+           (while (lessp (nxtch) 33) (setq c1 (readc)))
+           (setq c2 (nxtch))
+           (setq i (readlist))
+           (if
+            (eqn c2 46)
+            (cons temp (cadr i))
+            (cons temp i)))))))
+      (repeat (setq ch (readc)) (greaterp ch 32))
+      (cond
+       ((eqn ch 40) (readlist))
+       ((eqn ch 41) nil)
+       ((eqn ch 39) (list quote (read-in-lisp)))
+       (t (readident ch)))))))
+  (read-in-lisp)))
+(lambda
+ (x y)
+ (if y
+  (if
+   (zerop x)
+   (cdr y)
+   (rplacd y (nthdel (sub1 x) (cdr y))))))
+(lambda
+ (x y z)
+ (if
+  (zerop x)
+  (rplaca z y)
+  (nthswap (sub1 x) y (cdr z))))
+(lambda
+ (x y z)
+ (if
+  (zerop x)
+  (cons y z)
+  (rplacd z (nthpush (sub1 x) y (cdr z)))))
+(lambda
+ (x y)
+ (if x (cons (car x) (append (cdr x) y)) y))
+(printc 32)
+(lambda
+ (x)
+ (cond
+  ((atom x) x)
+  ((eq (car x) ',)
+   (list 'cons (cadr x) (`2 (cddr x))))
+  ((eq (car x) ',@)
+   (list 'append (cadr x) (`2 (cddr x))))
+  ((atom (car x))
+   (list
+    'cons
+    (list quote (car x))
+    (`2 (cdr x))))
+  ((equal (car x) '',)
+   (list
+    'cons
+    (list 'list quote (cadr x))
+    (`2 (cddr x))))
+  (t
+   (list 'cons (`2 (car x)) (`2 (cdr x))))))
+(lambda x
+ (if x
+  (map
+   (reverse x)
+   (function
+    (lambda
+     (x)
+     (let
+      ((comp (assoc x *COMPILED-FUNCTIONS*)))
+      (if comp
+       (progn
+        (if (eq comp (car *COMPILED-FUNCTIONS*)) (no-compiled-code (eval x)))
+        (setq *COMPILED-FUNCTIONS* (del-member comp *COMPILED-FUNCTIONS*))
+        (set x (cadr comp))
+        (car comp)))))))
+  (let
+   ((name nil))
+   (mapc *COMPILED-FUNCTIONS*
+    (function
+     (lambda
+      (x)
+      (push (car x) name)
+      (set (car x) (cadr x)))))
+   (setq *COMPILED-FUNCTIONS* nil)
+   (unless (atom *main-loop*) (no-compiled-code))
+   name)))
+(lambda
+ (x)
+ (unless x (setq x '..))
+ (compress
+  (nconc
+   (explode x)
+   (explode (setq %gensym-seed% (if (null %gensym-seed%) 1 (add1 %gensym-seed%)))))))
+(lambda
+ (m%x m%f)
+ (cond
+  (m%x (cons (m%f (car m%x)) (map (cdr m%x) m%f)))))
+(lambda (m%x m%f) (while m%x (m%f (pop m%x))))
+(lambda
+ (y x)
+ (setq x (readcc))
+ (if
+  (zerop x)
+  (or
+   (cdr (assoc (setq x (readcc)) y))
+   (+ x 128))
+  x))
+(lambda %x$
+ (let
+  ((defq
+    (quote
+     (mlambda
+      (%x$ y)
+      (list 'setq %x$ (list 'function y))))))
+  (map %x$
+   (quote
+    (lambda
+     (%x$)
+     (if
+      (or
+       (not (identp %x$))
+       (assoc %x$ *COMPILED-FUNCTIONS*)
+       (atom (eval %x$))
+       (numberp (car (eval %x$))))
+      ()
+      (let
+       ((%exp% (macroexpand (eval %x$))) (%mac% nil) (%margs% nil))
+       (when
+        (member (car %exp%) '(mlambda macro nslambda nlambda))
+        (setq %mac% (car %exp%))
+        (setq %margs% (cadr %exp%))
+        (let
+         ((new (flat %margs%)))
+         (setq %exp%
+          (cons
+           (list
+            'function
+            (cons 'lambda (cons new (cddr %exp%))))
+           new))))
+       (push (list %x$ (eval %x$)) *COMPILED-FUNCTIONS*)
+       (progv (list %x$) (set %x$ %exp%) (setq %exp% (ncompile %exp%)))
+       (set %x$ (if %mac% (list %mac% %margs% %exp%) %exp%))
+       %x$)))))))
+(lambda
+ (%x$ hantaa-vaan)
+ (cond
+  ((atom %x$) %x$)
+  ((eq (car %x$) quote) %x$)
+  ((eq (car %x$) 'lambda)
+   (cons (car %x$) (cons (cadr %x$) (macroexpand (cddr %x$)))))
+  ((and
+    (eq (car %x$) 'if)
+    (member (car (cadr %x$)) '(null not)))
+   (macroexpand
+    (list
+     'if
+     (cadr (cadr %x$))
+     (cadddr %x$)
+     (caddr %x$))))
+  ((and
+    (not hantaa-vaan)
+    (identp (car %x$))
+    (member (car (eval (car %x$))) '(macro mlambda)))
+   (macroexpand
+    (eval
+     (cons
+      (list quote
+       (cons
+        (if
+         (eq (car (eval (car %x$))) 'mlambda)
+         'nlambda
+         'nslambda)
+        (cdr (eval (car %x$)))))
+      (cdr %x$)))))
+  (t (cons (macroexpand (car %x$)) (macroexpand (cdr %x$) t)))))

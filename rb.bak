@@ -1,0 +1,15 @@
+
+'(%Z%%M% %R%.%L%.%B%.%S% %E% %Y%)
+'(MIKKO-3 (6 / 2 - 2005) (0 : 12 : 35 93))
+(defq *package* RB)
+
+(defun reverse-bits
+ (x msb)
+ (if
+  (zerop msb)
+  0
+  (+
+   (/ x msb)
+   (* 2 (reverse-bits (remainder x msb) (/ msb 2))))))
+
+(defq RB (reverse-bits RB))
